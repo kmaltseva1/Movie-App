@@ -1,0 +1,205 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "ignorePatterns": [
+      "node_modules",
+      "dist",
+      "build"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:jsx-a11y/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:prettier/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "airbnb",
+      "airbnb/hooks",
+      "prettier"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "requireConfigFile": false,
+      "babelOptions": {
+        "babelrc": false,
+        "configFile": false,
+        "presets": [
+          "@babel/preset-react"
+        ]
+      },
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "jsx-a11y",
+      "react-hooks",
+      "prettier",
+      "import"
+    ],
+    "overrides": [
+      {
+        "files": ["files/transformed/by/babel/*.js"],
+        "parser": "@babel/eslint-parser"
+      }
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "prettier/prettier": "error",
+      "linebreak-style": [
+        0,
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
+      "no-plusplus": "off",
+      "consistent-return": "off",
+      "class-methods-use-this": "off",
+      "dot-notation": "off",
+      "jsx-a11y/control-has-associated-label": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/button-has-type": "off",
+      "react/state-in-constructor": "off",
+      "react/prop-types": 0,
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "import/no-extraneous-dependencies": "off",
+      "import/no-unresolved": [
+        2,
+        {
+          "caseSensitive": false
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "import/order": [
+        2,
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ]
+    },
+    "settings": {
+      "jsx-a11y": {
+        "polymorphicPropName": "as",
+        "components": {
+          "CityInput": "input",
+          "CustomButton": "button",
+          "MyButton": "button",
+          "RoundButton": "button"
+        }
+      },
+      "react": {
+        "createClass": "createReactClass",
+        "pragma": "React",
+        "fragment": "Fragment",
+        "version": "detect",
+        "defaultVersion": "",
+        "flowVersion": "0.53"
+      },
+      "propWrapperFunctions": [
+        "forbidExtraProps",
+        {
+          "property": "freeze",
+          "object": "Object"
+        },
+        {
+          "property": "myFavoriteWrapper"
+        },
+        {
+          "property": "forbidExtraProps",
+          "exact": true
+        }
+      ],
+      "componentWrapperFunctions": [
+        "observer",
+        {
+          "property": "styled"
+        },
+        {
+          "property": "observer",
+          "object": "Mobx"
+        },
+        {
+          "property": "observer",
+          "object": "<pragma>"
+        }
+      ],
+      "formComponents": [
+        "CustomForm",
+        {
+          "name": "SimpleForm",
+          "formAttribute": "endpoint"
+        },
+        {
+          "name": "Form",
+          "formAttribute": [
+            "registerEndpoint",
+            "loginEndpoint"
+          ]
+        }
+      ],
+      "linkComponents": [
+        "Hyperlink",
+        {
+          "name": "MyLink",
+          "linkAttribute": "to"
+        },
+        {
+          "name": "Link",
+          "linkAttribute": [
+            "to",
+            "href"
+          ]
+        }
+      ],
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ],
+          "moduleDirectory": [
+            "node_modules",
+            "src/"
+          ]
+        }
+      }
+    }
+  }

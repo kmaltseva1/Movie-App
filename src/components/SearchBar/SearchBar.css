@@ -1,0 +1,37 @@
+.search-bar {
+    width: 935px;
+    height: 40px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+
+    font-size: 16px;
+    font-family: "Inter-Light", "system-ui";
+    color: black;
+}
+.search-bar:focus {
+    outline: 1px solid #1890FF;
+}
+.search-bar::placeholder {
+    color: #D9D9D9;
+}
+
+@media (width < 1015px) {
+    .search-bar {
+        width: 450px;
+    }
+}
+
+@media (width < 500px) {
+    .search-bar {
+        width: 380px;
+    }
+}
+
+@media (width < 400px) {
+    .search-bar {
+        width: 360px;
+    }
+}

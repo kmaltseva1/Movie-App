@@ -1,0 +1,23 @@
+.filter-tabs {
+    width: 146px;
+    height: 54px;
+    margin: 0 auto 20px auto;
+}
+
+.filter-tabs__tab {
+    width: 73px;
+    height: 54px;
+
+    color: #D9D9D9;
+    font-family: "Inter-Light", "system-ui";
+    font-size: 14px;
+
+    border: none;
+    border-bottom: 1px solid #D9D9D9;
+    background-color: inherit;
+}
+
+.filter-tabs__tab--active {
+    color: #1890FF;
+    border-bottom: #1890FF 3px solid;
+}

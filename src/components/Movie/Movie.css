@@ -1,0 +1,154 @@
+.movie {
+    width: 450px;
+    height: 280px;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+}
+.movie__loading {
+    width: 450px;
+    height: 280px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie__image {
+    width: 185px;
+    height: 100%;
+}
+
+.movie__info {
+    width: 265px;
+    height: 280px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-shrink: 1;
+}
+/* .movie__header {
+
+} */
+.movie__title {
+    width: 205px;
+    margin: 0 0 5px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+.movie__vote-average {
+    display: block;
+    margin: 0;
+    padding-top: 6px;
+    height: 30px;
+    width: 30px;
+
+    border-radius: 50%;
+
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+.movie__vote-average--terrible {
+    outline: solid 2px #E90000;
+}
+.movie__vote-average--bad {
+    outline: solid 2px #E97E00;
+}
+.movie__vote-average--ok {
+    outline: solid 2px #E9D100;
+}
+.movie__vote-average--good {
+    outline: solid 2px #66E900;
+}
+
+.movie__date {
+    margin: 0 0 10px 0;
+
+    font-size: 12px;
+    color: rgba(130, 126, 126, 1);
+}
+
+.movie__overview {
+    height: 130px;
+    margin: 0;
+
+    font-size: 12px;
+
+    overflow: hidden;
+}
+.movie__empty-overview {
+    font-size: 12px;
+    color: darkgray;
+}
+
+.movie__rate-stars {
+    width: max-content;
+    height: 20px;
+    position: absolute;
+    bottom: 15px;
+    right: 0;
+    transform: scale(0.85);
+}
+
+@media (width < 500px) {
+    .movie {
+        width: 380px;
+        height: 245px;
+
+        display: grid;
+        grid-template-columns: 60px 1fr;
+    }
+    .movie__loading {
+        width: 380px;
+        height: 245px;
+    }
+    .movie__image {
+        width: 60px;
+        height: 91px;
+    }
+    .movie__image[alt]{
+        font-size: 12px;
+    }
+    .movie__info {
+        width: 320px;
+        height: 245px;
+        padding: 10px;
+    }
+    .movie__overview {
+        width: 350px;
+        position: relative;
+        left: -60px;
+    }
+    .movie__empty-overview {
+        left: 0;
+    }
+}
+@media (width < 400px) {
+    .movie {
+        width: 360px;
+
+        display: grid;
+        grid-template-columns: 60px 1fr;
+    }
+    .movie__loading {
+        width: 360px;
+        height: 245px;
+    }
+    .movie__info {
+        width: 300px;
+    }
+    .movie__rate-stars {
+        bottom: 10px;
+    }
+}
