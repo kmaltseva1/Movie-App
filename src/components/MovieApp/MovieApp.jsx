@@ -1,13 +1,11 @@
 import './MovieApp.css'
+import React, { Component } from 'react'
 
-import React, { Component, Fragment } from 'react'
-import { Pagination } from 'antd'
-
-import MovieApiService from '../../MovieApiService'
-import MovieList from '../MovieList'
+import { createGuestSession, getGenresList, searchMoviesByQuery, getRatedMovies } from '../../MovieApiService'
 import FilterTabs from '../FilterTabs'
-import SearchBar from '../SearchBar'
 import { MovieGenresProvider } from '../MovieGenresContext'
+import SearchTab from '../Tabs/SearchTab'
+import RatedTab from '../Tabs/RatedTab'
 
 export default class MovieApp extends Component {
   state = {
@@ -24,27 +22,18 @@ export default class MovieApp extends Component {
     genresDataLoading: true,
     genresError: false,
     filterTabs: [
-      {
-        label: 'Search',
-        isActive: true,
-      },
-      {
-        label: 'Rated',
-        isActive: false,
-      },
+      { label: 'Search', isActive: true },
+      { label: 'Rated', isActive: false },
     ],
     guestSessionId: null,
   }
 
-  movieService = new MovieApiService()
-
   componentDidMount() {
     const { query } = this.state
 
-    this.movieService
-      .createGuestSession()
+    createGuestSession()
       .then(() => {
-        this.setState({ guestSessionId: this.movieService.guestSessionId })
+        this.setState({ guestSessionId: localStorage.getItem('guestSessionId') })
       })
       .catch((err) => {
         console.error('Ошибка при создании гостевой сессии:', err.message)
@@ -67,19 +56,14 @@ export default class MovieApp extends Component {
     const filterTab = e.target
     const { filterTabs, query, page, ratedPage } = this.state
     const activeFilterTab = filterTabs.filter((tab) => tab.isActive === true)[0]
+
     if (filterTab.textContent === 'Search' && activeFilterTab.label !== 'Search') {
       this.setState({ dataLoading: true })
       this.updateMovies(query, page)
       this.setState({
         filterTabs: [
-          {
-            label: 'Search',
-            isActive: true,
-          },
-          {
-            label: 'Rated',
-            isActive: false,
-          },
+          { label: 'Search', isActive: true },
+          { label: 'Rated', isActive: false },
         ],
       })
     } else if (filterTab.textContent === 'Rated' && activeFilterTab.label !== 'Rated') {
@@ -91,22 +75,15 @@ export default class MovieApp extends Component {
       }
       this.setState({
         filterTabs: [
-          {
-            label: 'Search',
-            isActive: false,
-          },
-          {
-            label: 'Rated',
-            isActive: true,
-          },
+          { label: 'Search', isActive: false },
+          { label: 'Rated', isActive: true },
         ],
       })
     }
   }
 
   getRatedMovies(page = 1) {
-    this.movieService
-      .getRatedMovies(page)
+    getRatedMovies(page)
       .then((apiData) => {
         this.setState({ ratedData: apiData, ratedPage: page })
       })
@@ -135,8 +112,7 @@ export default class MovieApp extends Component {
   }
 
   downloadGenres() {
-    this.movieService
-      .getGenresList()
+    getGenresList()
       .then((genresData) => {
         this.setState({ genresData })
       })
@@ -149,8 +125,7 @@ export default class MovieApp extends Component {
   }
 
   updateMovies(query, page = 1) {
-    this.movieService
-      .searchMoviesByQuery(query, page)
+    searchMoviesByQuery(query, page)
       .then((apiData) => {
         this.setState({ movieData: apiData, query, page })
       })
@@ -178,53 +153,34 @@ export default class MovieApp extends Component {
       genresError,
       guestSessionId,
     } = this.state
-    const genresObj = {
-      genresData,
-      genresDataLoading,
-      genresError,
-    }
+
     const movieAppFiltered = filterTabs[0].isActive ? (
-      <>
-        <SearchBar searchMovie={this.searchMovie} />
-        <MovieList
-          movieData={movieData}
-          dataLoading={dataLoading}
-          error={error}
-          errorMessage={errorMessage}
-          guestSessionId={guestSessionId}
-        />
-        <Pagination
-          defaultCurrent={1}
-          current={page}
-          defaultPageSize="1"
-          hideOnSinglePage="true"
-          total={this.movieService.totalPages}
-          onChange={this.paginationOnChanged}
-          align="center"
-        />
-      </>
+      <SearchTab
+        searchMovie={this.searchMovie}
+        movieData={movieData}
+        dataLoading={dataLoading}
+        error={error}
+        errorMessage={errorMessage}
+        guestSessionId={guestSessionId}
+        page={page}
+        totalPages={movieData ? movieData.totalPages : 1}
+        paginationOnChanged={this.paginationOnChanged}
+      />
     ) : (
-      <>
-        <MovieList
-          movieData={ratedData}
-          ratedError={ratedError}
-          dataLoading={dataLoading}
-          error={error}
-          errorMessage={errorMessage}
-        />
-        <Pagination
-          defaultCurrent={1}
-          current={ratedPage}
-          defaultPageSize="1"
-          hideOnSinglePage="true"
-          total={this.movieService.totalRatedPages}
-          onChange={this.paginationOnChanged}
-          align="center"
-        />
-      </>
+      <RatedTab
+        ratedData={ratedData}
+        ratedError={ratedError}
+        dataLoading={dataLoading}
+        error={error}
+        errorMessage={errorMessage}
+        ratedPage={ratedPage}
+        totalRatedPages={ratedData ? ratedData.totalRatedPages : 1}
+        paginationOnChanged={this.paginationOnChanged}
+      />
     )
+
     return (
-      <MovieGenresProvider value={genresObj}>
+      <MovieGenresProvider value={{ genresData, genresDataLoading, genresError }}>
         <div className="movie-app">
           <div className="movie-app__body">
             <FilterTabs onFilterTab={this.onFilterTab} filterTabs={filterTabs} />

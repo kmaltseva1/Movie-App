@@ -5,18 +5,19 @@ import { Rate, Spin } from 'antd'
 import React from 'react'
 
 import MovieGenres from '../MovieGenres'
-import MovieApiService from '../../MovieApiService'
+import { addGuestSessionId, addRating } from '../../MovieApiService'
 
 export default function Movie({ id, dataLoading, error, errorMessage, guestSessionId, ...movieProps }) {
-  const movieService = new MovieApiService()
-  movieService.addGuestSessionId(guestSessionId)
+  addGuestSessionId(guestSessionId)
+
   const onRated = (starsCount) => {
     if (starsCount < 1 || starsCount > 10) {
       return
     }
     sessionStorage.setItem(id.toString(), starsCount.toString())
-    movieService.addRating(id, starsCount)
+    addRating(id, starsCount)
   }
+
   const hasStarsDefaultValue = () => {
     const storedRating = sessionStorage.getItem(id)
     return storedRating ? parseFloat(storedRating) : 0
