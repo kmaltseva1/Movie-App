@@ -1,7 +1,7 @@
 import './MovieApp.css'
 import React, { Component } from 'react'
 
-import { createGuestSession, getGenresList, searchMoviesByQuery, getRatedMovies } from '../../MovieApiService'
+import { createGuestSession, getGenresList, getRatedMovies } from '../../MovieApiService'
 import FilterTabs from '../FilterTabs'
 import { MovieGenresProvider } from '../MovieGenresContext'
 import SearchTab from '../Tabs/SearchTab'
@@ -9,10 +9,7 @@ import RatedTab from '../Tabs/RatedTab'
 
 export default class MovieApp extends Component {
   state = {
-    query: 'return',
-    page: 1,
     ratedPage: 1,
-    movieData: null,
     ratedData: null,
     dataLoading: true,
     ratedError: false,
@@ -29,8 +26,6 @@ export default class MovieApp extends Component {
   }
 
   componentDidMount() {
-    const { query } = this.state
-
     createGuestSession()
       .then(() => {
         this.setState({ guestSessionId: localStorage.getItem('guestSessionId') })
@@ -39,27 +34,17 @@ export default class MovieApp extends Component {
         console.error('Ошибка при создании гостевой сессии:', err.message)
       })
 
-    this.updateMovies(query)
     this.downloadGenres()
     sessionStorage.clear()
   }
 
-  onError = (err) => {
-    this.setState({
-      error: true,
-      dataLoading: false,
-      errorMessage: err.message,
-    })
-  }
-
   onFilterTab = (e) => {
     const filterTab = e.target
-    const { filterTabs, query, page, ratedPage } = this.state
+    const { filterTabs, ratedPage } = this.state
     const activeFilterTab = filterTabs.filter((tab) => tab.isActive === true)[0]
 
     if (filterTab.textContent === 'Search' && activeFilterTab.label !== 'Search') {
       this.setState({ dataLoading: true })
-      this.updateMovies(query, page)
       this.setState({
         filterTabs: [
           { label: 'Search', isActive: true },
@@ -91,24 +76,12 @@ export default class MovieApp extends Component {
         this.setState({ dataLoading: false })
       })
       .catch((err) => {
-        this.onError(err)
+        this.setState({
+          error: true,
+          dataLoading: false,
+          errorMessage: err.message,
+        })
       })
-  }
-
-  paginationOnChanged = (page) => {
-    const { query, filterTabs } = this.state
-    if (!filterTabs[0].isActive) {
-      this.getRatedMovies(page)
-    } else {
-      this.updateMovies(query, page)
-    }
-  }
-
-  searchMovie = (e) => {
-    const query = e.target.value
-    if (query.length !== 0) {
-      this.updateMovies(query)
-    }
   }
 
   downloadGenres() {
@@ -124,28 +97,13 @@ export default class MovieApp extends Component {
       })
   }
 
-  updateMovies(query, page = 1) {
-    searchMoviesByQuery(query, page)
-      .then((apiData) => {
-        this.setState({ movieData: apiData, query, page })
-      })
-      .then(() => {
-        this.setState({ dataLoading: false })
-      })
-      .catch((err) => {
-        this.onError(err)
-      })
-  }
-
   render() {
     const {
-      movieData,
       dataLoading,
       error,
       ratedError,
       errorMessage,
       filterTabs,
-      page,
       ratedData,
       ratedPage,
       genresData,
@@ -155,17 +113,7 @@ export default class MovieApp extends Component {
     } = this.state
 
     const movieAppFiltered = filterTabs[0].isActive ? (
-      <SearchTab
-        searchMovie={this.searchMovie}
-        movieData={movieData}
-        dataLoading={dataLoading}
-        error={error}
-        errorMessage={errorMessage}
-        guestSessionId={guestSessionId}
-        page={page}
-        totalPages={movieData ? movieData.totalPages : 1}
-        paginationOnChanged={this.paginationOnChanged}
-      />
+      <SearchTab guestSessionId={guestSessionId} />
     ) : (
       <RatedTab
         ratedData={ratedData}
@@ -174,8 +122,6 @@ export default class MovieApp extends Component {
         error={error}
         errorMessage={errorMessage}
         ratedPage={ratedPage}
-        totalRatedPages={ratedData ? ratedData.totalRatedPages : 1}
-        paginationOnChanged={this.paginationOnChanged}
       />
     )
 
