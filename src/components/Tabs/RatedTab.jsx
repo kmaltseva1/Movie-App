@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Pagination } from 'antd'
 
 import MovieList from '../MovieList'
-// import { getRatedMovies } from '../../MovieApiService'
 
 export default class RatedTab extends Component {
   paginationOnChanged = (page) => {
